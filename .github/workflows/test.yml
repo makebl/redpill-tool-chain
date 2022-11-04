@@ -72,7 +72,15 @@ jobs:
             docker/downloads/*.txz
           key: ${{matrix.platform}}-${{matrix.version}}-${{ hashFiles('global_config.json') }}
           restore-keys: ${{matrix.platform}}-${{matrix.version}}-
-
+          
+      - name: 设置当前的日期
+        id: date
+        run: |
+         echo "date=$(date +'%Y.%m.%d-%H%M')" >> $GITHUB_ENV
+         echo "date2=$(date +'%m/%d %Y')" >> $GITHUB_ENV
+         echo "date3=$(date +'%m.%d')" >> $GITHUB_ENV
+         echo "date4=$(date +'%m.%d.%H')" >> $GITHUB_ENV
+         
       - name: 清理缓存
         if: "${{ github.event.inputs.clean_cache == 'true' }}"
         run: |
@@ -153,7 +161,18 @@ jobs:
           name: dsm-${{matrix.platform}}-${{matrix.version}}
           path: images/redpill-*.img
           if-no-files-found: error
-
+          
+      - name: 发布固件
+        uses: softprops/action-gh-release@v1
+        if: steps.tag.outputs.status == 'success' && !cancelled()
+        env:
+         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+        with:
+         files: "${{ env.FIRMWARE }}/*"
+         name: dsm-${{matrix.platform}}-${{matrix.version}}
+         tag_name: ${{matrix.platform}}_${{matrix.version}}
+         body_path: images/redpill-*.img
+        
       - name: 删除旧的工作流
         uses: Mattraks/delete-workflow-runs@v2
         with:
