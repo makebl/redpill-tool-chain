@@ -172,7 +172,7 @@ jobs:
          files: "${{ env.FIRMWARE }}/*"
          name: dsm-${{matrix.platform}}-${{matrix.version}}
          tag_name: ${{matrix.platform}}_${{matrix.version}}
-         body_path: images/redpill-*.img
+         body_path: release.txt
         
       - name: 删除旧的工作流
         uses: Mattraks/delete-workflow-runs@v2
