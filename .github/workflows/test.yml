@@ -80,6 +80,7 @@ jobs:
          echo "date2=$(date +'%m/%d %Y')" >> $GITHUB_ENV
          echo "date3=$(date +'%m.%d')" >> $GITHUB_ENV
          echo "date4=$(date +'%m.%d.%H')" >> $GITHUB_ENV
+         echo "UPLOAD_RELEASE=${UPLOAD_RELEASE}" >> ${GITHUB_ENV}
          
       - name: 清理缓存
         if: "${{ github.event.inputs.clean_cache == 'true' }}"
@@ -164,7 +165,7 @@ jobs:
           
       - name: 发布固件
         uses: softprops/action-gh-release@v1
-        if: steps.tag.outputs.status == 'success' && !cancelled()
+        if: steps.compile.outcome == 'success' && env.UPLOAD_RELEASE == 'true' && env.REPO_TOKEN
         env:
          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
         with:
