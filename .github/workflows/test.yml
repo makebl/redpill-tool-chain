@@ -162,7 +162,15 @@ jobs:
           name: dsm-${{matrix.platform}}-${{matrix.version}}
           path: images/redpill-*.img
           if-no-files-found: error
-          
+
+      - name: 生成发布标签
+        id: tag
+        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        run: |
+         echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
+         touch release.txt
+         echo "::set-output name=status::success"
+        
       - name: 发布固件
         uses: softprops/action-gh-release@v1
 
@@ -172,7 +180,7 @@ jobs:
          files: "${{ env.FIRMWARE }}/*"
          name: dsm-${{matrix.platform}}-${{matrix.version}}
          tag_name: ${{matrix.platform}}_${{matrix.version}}
-         path: images/redpill-*.img
+         body_path: release.txt
 
         
       - name: 删除旧的工作流
