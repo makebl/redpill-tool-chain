@@ -165,7 +165,6 @@ jobs:
 
       - name: 生成发布标签
         id: tag
-        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
          echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
          touch release.txt
