@@ -163,12 +163,7 @@ jobs:
           path: images/redpill-*.img
           if-no-files-found: error
 
-      - name: 生成发布标签
-        id: tag
-        run: |
-         echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
-         touch release.txt
-         echo "status=success" >> $GITHUB_OUTPUT
+
         
       - name: 发布固件
         uses: ncipollo/release-action@v1.8.0
@@ -177,9 +172,9 @@ jobs:
          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
         with:
          files: "${{matrix.platform}}"
-         name: dsm-${{matrix.platform}}-${{matrix.version}}
-         tag_name: ${{matrix.platform}}_${{matrix.version}}
-         body_path: release.txt
+         tag: ${{ env.date }}
+         bodyFile: "redpill-*.img"
+
 
         
       - name: 删除旧的工作流
