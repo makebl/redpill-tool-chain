@@ -168,10 +168,10 @@ jobs:
         run: |
          echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
          touch release.txt
-         echo "::set-output name=status::success"
+         echo "status=success" >> $GITHUB_OUTPUT
         
       - name: 发布固件
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@main
 
         env:
          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
