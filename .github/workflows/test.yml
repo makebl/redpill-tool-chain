@@ -176,7 +176,7 @@ jobs:
         env:
          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
         with:
-         files: "${{ env.FIRMWARE }}/*"
+         files: "${{matrix.platform}}"
          name: dsm-${{matrix.platform}}-${{matrix.version}}
          tag_name: ${{matrix.platform}}_${{matrix.version}}
          body_path: release.txt
