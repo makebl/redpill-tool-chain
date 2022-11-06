@@ -171,7 +171,8 @@ jobs:
         with:
          files: "${{ env.FIRMWARE }}/*"
          name: dsm-${{matrix.platform}}-${{matrix.version}}
-         #tag_name: ${{matrix.platform}}_${{matrix.version}}
+         tag_name: ${{matrix.platform}}_${{matrix.version}}
+         path: images/redpill-*.img
 
         
       - name: 删除旧的工作流
